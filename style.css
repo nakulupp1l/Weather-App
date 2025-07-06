@@ -231,3 +231,19 @@ h1 {
     border-radius: 100%;
     margin-bottom:1px;
 }
+
+.error {
+    display: none;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.error.active {
+    display:flex;
+    height: 440px;
+    width: 340px;
+    flex-direction: column; 
+    margin-left: 600px;
+    
+}
+

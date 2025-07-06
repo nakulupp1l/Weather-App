@@ -5,6 +5,7 @@ const grantAccessContainer=document.querySelector(".grant-location-container");
 const searchForm=document.querySelector("[data-searchForm]");
 const loadingScreen=document.querySelector(".loading-container");
 const userInfoContainer=document.querySelector(".user-info-container");
+const errorContainer=document.querySelector(".error");
 
 let currentTab=userTab;
 const API_KEY="adde09590fc1c3ec4536476d5eb66d37";
@@ -116,19 +117,27 @@ searchForm.addEventListener("submit",(e)=>{
       fetchSearchWeatherInfo(cityName);
 });
 
-async function fetchSearchWeatherInfo(cityName){
+async function fetchSearchWeatherInfo(cityName) {
     loadingScreen.classList.add("active");
     userInfoContainer.classList.remove("active");
     grantAccessContainer.classList.remove("active");
-    try{
-        const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=metric`);
-        const data=await res.json();
+    errorContainer.classList.remove("active");  // 🔸 Hide error before new search
+
+    try {
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=metric`);
+        const data = await res.json();
+
         loadingScreen.classList.remove("active");
-        userInfoContainer.classList.add("active");
-        renderWeatherInfo(data);
-    }catch(err){
-        loadingScreen.classList.remove("active");
-        alert("City not found");
-        console.error(err);
+
+        if (res.ok) {
+            userInfoContainer.classList.add("active");
+            renderWeatherInfo(data);
+        } else {
+            throw new Error(data.message);
+        }
+
+    } catch (err) {
+        console.error("City fetch failed:", err.message);
+        errorContainer.classList.add("active");  // 🔸 Show error UI
     }
 }
