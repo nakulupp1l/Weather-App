@@ -21,6 +21,7 @@ searchTab.addEventListener("click",()=>{
 }
 );
 function switchTab(clickedTab){
+    errorContainer.classList.remove("active");
     if(clickedTab!==currentTab){
         currentTab.classList.remove("current-tab");
         currentTab=clickedTab;
@@ -41,7 +42,9 @@ function switchTab(clickedTab){
 //to check if coordinates are available in session storage
 function getfromSessionStorage(){
     const localCoordinates=sessionStorage.getItem("user-coordinates");
+    errorContainer.classList.remove("active");
     if(!localCoordinates){
+
         grantAccessContainer.classList.add("active");
     }else{
         //JSON.parse() converts the string back to an object
@@ -59,6 +62,7 @@ async function fetchUserWeatherInfo(coordinates){
         const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
         const data=await res.json();
         loadingScreen.classList.remove("active");
+        errorContainer.classList.remove("active");
         userInfoContainer.classList.add("active");
         renderWeatherInfo(data);
     }catch(err){
