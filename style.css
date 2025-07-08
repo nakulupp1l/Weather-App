@@ -246,3 +246,8 @@ h1 {
     margin-left: 600px;
 }
 
+@media(max-width:600px){
+    .parameter-container{
+        flex-direction: column;
+    }
+}
